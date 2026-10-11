@@ -1,70 +1,67 @@
-# Módulos Odoo a medida — SGI (Sistema de Gestión Integrado)
+# Formación y RRHH (SGI) — Módulo Odoo
 
-Módulos custom de Odoo desarrollados como proyecto de formación y prueba de hasta dónde llega el desarrollo a medida en Odoo. Migran a Odoo la lógica de la **Suite-SGI** (apps HTML/JS de gestión ISO 9001 / 14001 / 45001 / 27001).
+Módulo custom de Odoo que lleva al ERP el bloque de **Personas, Puestos y Formación** de la Suite-SGI (ISO 9001/45001/27001): perfiles de personas, organigrama, ficha de la persona, altas y bajas, asignación de recursos, requisitos por puesto, evaluación de requisitos, matriz de polivalencia y plan de formación.
 
-Probados en **Odoo 19.0 Community** sobre **CasaOS (BigBear)** en red local (`http://192.168.1.90:8069`). Código compatible con **Odoo 18 y 19** (mismas fuentes, versión `19.0.x` en el manifiesto para instalar en el 19).
+Probado en **Odoo 19.0 Community** sobre **CasaOS (BigBear)** en red local. Código compatible con **Odoo 18 y 19** (mismas fuentes, versión `19.0.x` en el manifiesto para instalar en el 19).
 
-## Módulos
+## Origen funcional
 
-| Carpeta | Nombre en Odoo | Qué hace | Depende de |
-|---|---|---|---|
-| `sgi_demo` | SGI Demo - No Conformidades | Gestión de No Conformidades en 5 pasos (datos → reparadoras → causas → correctivas → eficacia), 28 tipologías ISO, workflow `Abierta → En proceso → Pendiente Verificación → Cerrada`, secuencia `NC/AAAA/0001`, informe PDF QWeb, dashboard pivot, cron de plazos vencidos | `base`, `mail` |
-| `sgsi` | SGSI - Seguridad de la Información (ISO 27001) | Activos (C-I-D 1-10), amenazas (impacto×probabilidad), revisiones de análisis con umbral, matriz activo×amenaza con cálculo `valor=(C+I+D)·(I×P)`, tratamientos multi-riesgo con seguimiento, software aprobado, equipos TI **reutilizando `maintenance.equipment`** (sin duplicar), informe PDF, cron de pendientes | `base`, `mail`, `maintenance` |
-| `formacion_rrhh` | Formación y RRHH (SGI) | Personas (vinculadas a `hr.employee`), puestos jerárquicos (vinculados a `hr.job`, vista organigrama), requisitos por puesto con niveles 0-4, evaluación persona×puesto con % cumplimiento, matriz de polivalencia (pivot), plan de formación con eficacia, procesos de alta/baja, asignaciones de recursos, versiones snapshot de organigrama, informes PDF | `base`, `mail`, `hr` |
-| `sgi_hello` | SGI Hello (Test) | Módulo mínimo de prueba de detección de addons, sin uso productivo | `base` |
+Replica `Suite-SGI/js/modules/formacion.js` (dashboard, evaluación, matriz, plan), `Suite-SGI/js/shared/personas.js` (listado, ficha, altas, bajas, asignaciones, configuración RRHH) y `Suite-SGI/js/shared/puestos.js` (puestos, organigrama + versiones, requisitos).
 
-Todos incluyen datos demo instalables y grupos de seguridad `Usuario/Gestor` + respaldo para `base.group_user`.
+## Qué incluye
+
+- **Personas**: ficha (nombre, apellidos, departamento, email), vínculo opcional a `hr.employee`, fecha de alta/baja, activo, puestos con rol titular/polivalencia, notebook con puestos, valoraciones y asignaciones, % medio de cumplimiento, chatter.
+- **Puestos**: vínculo opcional a `hr.job`, jerarquía `depende de` con vista organigrama (`hierarchy`), tareas con nivel esperado 0-4, formación obligatoria/recomendable y habilidades, contadores de titulares y polivalentes.
+- **Evaluación de requisitos**: una valoración por persona×puesto, botón **Cargar requisitos del puesto**, líneas de tarea (cumple si nivel ≥ esperado) y de formación/habilidad (check), % con barra de progreso.
+- **Matriz de polivalencia**: vista pivot persona×puesto con % de cumplimiento.
+- **Plan de formación**: título, objetivo, tipo, formador (catálogo o texto), workflow planificada→en curso→realizada, previstas/reales, fechas, horas, eficacia con criterio y valoración, informe PDF, cron diario de vencidas.
+- **Altas y bajas**: procesos con items verificables, botón de generar formación en altas; al completar una baja desactiva a la persona (y al completar un alta la reactiva).
+- **Asignaciones**: recursos multiorigen (equipo informático, calibración, mantenimiento, software, activo de información, propio) con entrega/devolución.
+- **Organigrama**: versiones snapshot (JSON de puestos + titulares) con botón de captura.
+- **Seguridad**: grupos `Formacion Usuario/Gestor` + respaldo para `base.group_user` en todos los modelos.
+- **Demos**: 3 puestos jerárquicos, 4 personas, 2 tareas, 1 valoración al 100% y 2 acciones de plan.
 
 ## Requisitos
 
-- Odoo 18 o 19 Community (probado en `19.0-20251121`).
-- Apps estándar instaladas según dependencias: **Debate** (`mail`), **Mantenimiento** (`maintenance`), **Empleados** (`hr`).
-- Si usas CasaOS BigBear: volumen de addons personalizados montado en `/mnt/extra-addons` y esta línea en `odoo.conf`:
+- Odoo 18 o 19 Community.
+- App **Empleados** (`hr`) instalada (vínculos opcionales a `hr.employee` / `hr.job`).
+- En CasaOS BigBear: volumen de addons en `/mnt/extra-addons` y en `odoo.conf`:
   ```ini
   addons_path = /mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons
   ```
 
-## Instalación (CasaOS)
+## Instalación
 
-1. En **Archivos** ve a `/DATA/AppData/big-bear-odoo/data/addons/` (carpeta en **minúsculas**, p. ej. `sgsi`, nunca `SGSI`: en Linux el nombre de carpeta es el nombre técnico y las referencias son sensibles a mayúsculas).
-2. Copia dentro la carpeta del módulo (o sube el `.zip` y **Extrae**). Debe quedar `.../addons/sgsi/__manifest__.py`, sin doble carpeta `sgsi/sgsi/`.
-3. **Reinicia** el contenedor `big-bear-odoo` y espera a `En ejecución`.
-4. En Odoo: `Apps → Actualizar lista de aplicaciones → Actualizar` → busca el módulo → **Activar** sin salir de la página (la instalación puede tardar 1-3 min).
-5. Asigna grupos al usuario en `Ajustes → Técnico → Grupos` (`SGSI Gestor`, `Formacion Gestor`...), ya que al no usar categoría no salen en la vista simplificada de permisos.
-6. Refresca con `Ctrl+Shift+R`.
+1. Copiar la carpeta `formacion_rrhh` (**en minúsculas**, sin doble carpeta `formacion_rrhh/formacion_rrhh`) en `/DATA/AppData/big-bear-odoo/data/addons/`, o subir `formacion_rrhh.zip` y **Extraer**.
+2. Reiniciar el contenedor y esperar a `En ejecución`.
+3. En Odoo: `Apps → Actualizar lista de aplicaciones → Actualizar` → buscar `Formacion` → **Activar** sin salir de la página.
+4. Asignar el grupo en `Ajustes → Técnico → Grupos → Formacion Gestor → Usuarios` (no aparece en la vista simplificada de permisos).
+5. Recargar con `Ctrl+Shift+R`. Menú **Formacion** con 10 entradas.
 
-## Estructura de cada módulo
+## Estructura
 
 ```
-<modulo>/__manifest__.py      # version 19.0.x, depends, data en orden
-<modulo>/models/              # modelos + computes + constraints + workflow + cron
-<modulo>/views/               # list/form/search/pivot + menus (sin kanban/graph por defecto)
-<modulo>/security/            # grupos (sin category_id) + ir.model.access.csv con respaldo base.group_user
-<modulo>/data/                # sequence.xml, catalogs.xml, cron.xml, demo.xml
-<modulo>/reports/             # informes QWeb PDF
-<modulo>/static/description/icon.png
+formacion_rrhh/__manifest__.py      # 19.0.1.0.0, depends base/mail/hr
+formacion_rrhh/models/              # persona, puesto, tarea, valoracion, accion, proceso, asignacion, organigrama, catalogos
+formacion_rrhh/views/               # list/form/search/pivot/hierarchy + menus
+formacion_rrhh/security/            # grupos (sin category_id) + access con respaldo base.group_user
+formacion_rrhh/data/                # sequence FORM/, catalogos, cron, demo.xml
+formacion_rrhh/reports/             # QWeb: informe de accion + ficha de persona
 ```
 
-## Notas de compatibilidad 18/19 (lecciones del proyecto)
+## Notas de compatibilidad 18/19
 
-- Vistas de lista con `<list>`, nunca `<tree>` (el 19 lo rechaza).
-- Kanban con `t-name="card"` y sin `default_group_by` sobre `Selection` (provoca `OwlError` / salida del módulo en este build).
-- Sin `graph` en `view_mode` por defecto (falla `chartjs_lib` en BigBear); dashboard con `pivot`.
-- Chatter con `<chatter/>`, no `oe_chatter`.
-- Sin campo `numbercall` en `ir.cron` (eliminado en 19) ni `category_id` en `res.groups`.
-- Claves de `Selection` siempre `str` (los enteros dan `Error de validación`).
-- Referencias XML internas sin prefijo de módulo (`ref="group_..."`, no `ref="sgsi.group_..."`).
-- Sin `widget="badge"` dentro de `list editable` (lo deja solo-lectura).
+Listas con `<list>` (no `<tree>`), chatter con `<chatter/>`, sin `category_id` en grupos ni `numbercall` en cron, claves de `Selection` siempre `str`, referencias XML sin prefijo de módulo, carpeta en minúsculas, sin `graph`/`default_group_by` en `Selection` por limitaciones del build BigBear (dashboard con `pivot`).
 
 ## Publicar en GitHub
 
 ```bash
 git init
-git add sgi_demo sgsi formacion_rrhh README.md
-git commit -m "Modulos Odoo SGI: sgi_demo, sgsi, formacion_rrhh"
+git add formacion_rrhh README.md
+git commit -m "Modulo Odoo Formacion y RRHH (SGI)"
 git branch -M main
 git remote add origin <tu-repo>.git
 git push -u origin main
 ```
 
-No subir los `.zip` (se regeneran) ni credenciales. Licencia de los módulos: **LGPL-3**.
+Licencia: **LGPL-3**.
