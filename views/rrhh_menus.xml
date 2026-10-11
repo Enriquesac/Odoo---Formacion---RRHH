@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_form_root" name="Formacion" sequence="53" web_icon="formacion_rrhh,static/description/icon.png"/>
+    <menuitem id="menu_form_dash" name="Dashboard" parent="menu_form_root" sequence="5" action="action_accion"/>
+    <menuitem id="menu_form_personas" name="Personas" parent="menu_form_root" sequence="10" action="action_persona"/>
+    <menuitem id="menu_form_puestos" name="Puestos" parent="menu_form_root" sequence="15" action="action_puesto"/>
+    <menuitem id="menu_form_org" name="Organigrama" parent="menu_form_root" sequence="20" action="action_orgver"/>
+    <menuitem id="menu_form_eval" name="Evaluacion" parent="menu_form_root" sequence="25" action="action_valoracion"/>
+    <menuitem id="menu_form_matriz" name="Matriz polivalencia" parent="menu_form_root" sequence="30" action="action_matriz"/>
+    <menuitem id="menu_form_plan" name="Plan formacion" parent="menu_form_root" sequence="35" action="action_accion"/>
+    <menuitem id="menu_form_altas" name="Altas" parent="menu_form_root" sequence="40" action="action_proceso_alta"/>
+    <menuitem id="menu_form_bajas" name="Bajas" parent="menu_form_root" sequence="45" action="action_proceso_baja"/>
+    <menuitem id="menu_form_asig" name="Asignaciones" parent="menu_form_root" sequence="50" action="action_asignacion"/>
+</odoo>

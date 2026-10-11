@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_proceso_search" model="ir.ui.view">
+        <field name="name">rrhh.proceso.search</field>
+        <field name="model">rrhh.proceso</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="persona_id"/>
+                <field name="tipo"/>
+                <field name="estado"/>
+            </search>
+        </field>
+    </record>
+    <record id="view_proceso_list" model="ir.ui.view">
+        <field name="name">rrhh.proceso.list</field>
+        <field name="model">rrhh.proceso</field>
+        <field name="arch" type="xml">
+            <list string="Altas y bajas">
+                <field name="name"/>
+                <field name="tipo" widget="badge"/>
+                <field name="fecha_inicio" optional="show"/>
+                <field name="estado" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_proceso_form" model="ir.ui.view">
+        <field name="name">rrhh.proceso.form</field>
+        <field name="model">rrhh.proceso</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_en_curso" string="En curso" type="object" class="oe_highlight" invisible="estado != 'planificada'"/>
+                    <button name="action_generar_formacion" string="Generar formacion" type="object" invisible="tipo != 'alta' or estado == 'cancelada'"/>
+                    <button name="action_completar" string="Completar" type="object" class="oe_highlight" invisible="estado != 'en_curso'"/>
+                    <button name="action_cancelar" string="Cancelar" type="object" invisible="estado in ('completada','cancelada')"/>
+                    <field name="estado" widget="statusbar" statusbar_visible="planificada,en_curso,completada,cancelada"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="tipo"/>
+                            <field name="persona_id"/>
+                            <field name="puesto_ids" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="fecha_inicio"/>
+                            <field name="fecha_prevista"/>
+                            <field name="fecha_fin" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="observaciones"/>
+                    <field name="item_ids">
+                        <list editable="bottom">
+                            <field name="name"/>
+                            <field name="clase" optional="show"/>
+                            <field name="obligatorio" optional="hide"/>
+                            <field name="hecho"/>
+                            <field name="fecha" optional="show"/>
+                        </list>
+                    </field>
+                    <field name="formacion_ids" readonly="1">
+                        <list>
+                            <field name="name" string="Accion"/>
+                            <field name="estado"/>
+                        </list>
+                    </field>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_proceso_alta" model="ir.actions.act_window">
+        <field name="name">Altas</field>
+        <field name="res_model">rrhh.proceso</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('tipo','=','alta')]</field>
+        <field name="context">{'default_tipo': 'alta'}</field>
+    </record>
+    <record id="action_proceso_baja" model="ir.actions.act_window">
+        <field name="name">Bajas</field>
+        <field name="res_model">rrhh.proceso</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('tipo','=','baja')]</field>
+        <field name="context">{'default_tipo': 'baja'}</field>
+    </record>
+</odoo>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_formacion_accion" model="ir.sequence">
+        <field name="name">Formacion Accion</field>
+        <field name="code">formacion.accion</field>
+        <field name="prefix">FORM/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

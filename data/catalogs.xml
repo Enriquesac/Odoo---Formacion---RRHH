@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="destreza_trabajo_equipo" model="formacion.destreza">
+        <field name="name">Trabajo en equipo</field>
+    </record>
+    <record id="destreza_comunicacion" model="formacion.destreza">
+        <field name="name">Comunicacion</field>
+    </record>
+    <record id="destreza_seguridad" model="formacion.destreza">
+        <field name="name">Seguridad y prevencion</field>
+    </record>
+    <record id="formador_interno" model="formacion.formador">
+        <field name="name">Formador interno</field>
+        <field name="externo" eval="False"/>
+    </record>
+</odoo>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_puesto_search" model="ir.ui.view">
+        <field name="name">rrhh.puesto.search</field>
+        <field name="model">rrhh.puesto</field>
+        <field name="arch" type="xml">
+            <search><field name="name"/><field name="departamento"/></search>
+        </field>
+    </record>
+    <record id="view_puesto_list" model="ir.ui.view">
+        <field name="name">rrhh.puesto.list</field>
+        <field name="model">rrhh.puesto</field>
+        <field name="arch" type="xml">
+            <list string="Puestos">
+                <field name="name"/>
+                <field name="departamento" optional="show"/>
+                <field name="parent_id" string="Depende de" optional="show"/>
+                <field name="titular_count" string="Titulares"/>
+                <field name="polivalencia_count" string="Polivalentes"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_puesto_hierarchy" model="ir.ui.view">
+        <field name="name">rrhh.puesto.hierarchy</field>
+        <field name="model">rrhh.puesto</field>
+        <field name="arch" type="xml">
+            <hierarchy child_field="child_ids">
+                <field name="name"/>
+                <field name="departamento" optional="show"/>
+            </hierarchy>
+        </field>
+    </record>
+    <record id="view_puesto_form" model="ir.ui.view">
+        <field name="name">rrhh.puesto.form</field>
+        <field name="model">rrhh.puesto</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="departamento"/>
+                            <field name="job_id"/>
+                        </group>
+                        <group>
+                            <field name="parent_id"/>
+                            <field name="titular_count" readonly="1"/>
+                            <field name="polivalencia_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="descripcion" placeholder="Descripcion del puesto..."/>
+                    <notebook>
+                        <page string="Tareas y niveles">
+                            <field name="tarea_ids">
+                                <list editable="bottom">
+                                    <field name="name" string="Tarea"/>
+                                    <field name="nivel_esperado"/>
+                                </list>
+                            </field>
+                            <div class="text-muted">Niveles: 0-No, 1-Formación, 2-Apoyo, 3-Autónomo, 4-Formador.</div>
+                        </page>
+                        <page string="Formacion requerida">
+                            <group>
+                                <field name="formacion_obligatoria" placeholder="Una por línea..."/>
+                                <field name="formacion_recomendable" placeholder="Una por línea..."/>
+                                <field name="habilidades" placeholder="Una por línea..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_puesto" model="ir.actions.act_window">
+        <field name="name">Puestos</field>
+        <field name="res_model">rrhh.puesto</field>
+        <field name="view_mode">list,hierarchy,form</field>
+    </record>
+</odoo>

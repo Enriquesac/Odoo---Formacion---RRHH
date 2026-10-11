@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_valoracion_search" model="ir.ui.view">
+        <field name="name">rrhh.valoracion.search</field>
+        <field name="model">rrhh.valoracion</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="persona_id"/>
+                <field name="puesto_id"/>
+            </search>
+        </field>
+    </record>
+    <record id="view_valoracion_list" model="ir.ui.view">
+        <field name="name">rrhh.valoracion.list</field>
+        <field name="model">rrhh.valoracion</field>
+        <field name="arch" type="xml">
+            <list string="Evaluacion" decoration-success="cumplimiento &gt;= 80" decoration-warning="cumplimiento &lt; 80">
+                <field name="persona_id"/>
+                <field name="puesto_id"/>
+                <field name="fecha" optional="show"/>
+                <field name="cumplimiento" string="%"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_valoracion_pivot" model="ir.ui.view">
+        <field name="name">rrhh.valoracion.pivot</field>
+        <field name="model">rrhh.valoracion</field>
+        <field name="arch" type="xml">
+            <pivot string="Matriz polivalencia">
+                <field name="persona_id" type="row"/>
+                <field name="puesto_id" type="col"/>
+                <field name="cumplimiento" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_valoracion_form" model="ir.ui.view">
+        <field name="name">rrhh.valoracion.form</field>
+        <field name="model">rrhh.valoracion</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_cargar_requisitos" string="Cargar requisitos del puesto" type="object" class="oe_highlight"/>
+                    <field name="cumplimiento" widget="progressbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="persona_id"/>
+                        <field name="puesto_id"/>
+                        <field name="fecha"/>
+                    </group>
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="name" string="Requisito"/>
+                            <field name="tipo" optional="show"/>
+                            <field name="nivel_esperado" optional="show"/>
+                            <field name="nivel"/>
+                            <field name="cumplido" string="Cumple"/>
+                        </list>
+                    </field>
+                    <div class="text-muted">Tareas: cumple si nivel ≥ esperado. Formación/habilidades: marcar Cumple.</div>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_valoracion" model="ir.actions.act_window">
+        <field name="name">Evaluacion requisitos</field>
+        <field name="res_model">rrhh.valoracion</field>
+        <field name="view_mode">list,pivot,form</field>
+    </record>
+    <record id="action_matriz" model="ir.actions.act_window">
+        <field name="name">Matriz polivalencia</field>
+        <field name="res_model">rrhh.valoracion</field>
+        <field name="view_mode">pivot,list</field>
+    </record>
+</odoo>

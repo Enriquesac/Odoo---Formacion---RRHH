@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <!-- 3 puestos jerarquicos -->
+    <record id="demo_puesto_direccion" model="rrhh.puesto">
+        <field name="name">Direccion</field>
+        <field name="departamento">Direccion</field>
+        <field name="descripcion">Maximo nivel jerarquico</field>
+    </record>
+    <record id="demo_puesto_jefe" model="rrhh.puesto">
+        <field name="name">Jefe Produccion</field>
+        <field name="departamento">Produccion</field>
+        <field name="parent_id" ref="demo_puesto_direccion"/>
+        <field name="formacion_obligatoria">Prevencion riesgos
+Gestion de equipos</field>
+        <field name="habilidades">Liderazgo</field>
+    </record>
+    <record id="demo_puesto_operario" model="rrhh.puesto">
+        <field name="name">Operario</field>
+        <field name="departamento">Produccion</field>
+        <field name="parent_id" ref="demo_puesto_jefe"/>
+        <field name="formacion_obligatoria">Uso EPI
+Procedimiento arranque</field>
+        <field name="habilidades">Atencion al detalle</field>
+    </record>
+    <record id="demo_tarea_arranque" model="rrhh.puesto.tarea">
+        <field name="puesto_id" ref="demo_puesto_operario"/>
+        <field name="name">Arranque de linea</field>
+        <field name="nivel_esperado">3</field>
+    </record>
+    <record id="demo_tarea_control" model="rrhh.puesto.tarea">
+        <field name="puesto_id" ref="demo_puesto_operario"/>
+        <field name="name">Control visual piezas</field>
+        <field name="nivel_esperado">2</field>
+    </record>
+    <!-- 4 personas -->
+    <record id="demo_persona_ana" model="rrhh.persona">
+        <field name="name">Ana</field><field name="apellidos">Lopez Ruiz</field>
+        <field name="departamento">Produccion</field>
+    </record>
+    <record id="demo_persona_bruno" model="rrhh.persona">
+        <field name="name">Bruno</field><field name="apellidos">Diaz Gil</field>
+        <field name="departamento">Produccion</field>
+    </record>
+    <record id="demo_persona_carla" model="rrhh.persona">
+        <field name="name">Carla</field><field name="apellidos">Sanz Pico</field>
+        <field name="departamento">Calidad</field>
+    </record>
+    <record id="demo_persona_david" model="rrhh.persona">
+        <field name="name">David</field><field name="apellidos">Mora Vila</field>
+        <field name="departamento">Direccion</field>
+    </record>
+    <record id="demo_rel_ana_operario" model="rrhh.persona.puesto">
+        <field name="persona_id" ref="demo_persona_ana"/>
+        <field name="puesto_id" ref="demo_puesto_operario"/>
+        <field name="rol">titular</field>
+    </record>
+    <record id="demo_rel_bruno_operario" model="rrhh.persona.puesto">
+        <field name="persona_id" ref="demo_persona_bruno"/>
+        <field name="puesto_id" ref="demo_puesto_operario"/>
+        <field name="rol">polivalencia</field>
+    </record>
+    <!-- 1 valoracion -->
+    <record id="demo_valoracion_ana" model="rrhh.valoracion">
+        <field name="persona_id" ref="demo_persona_ana"/>
+        <field name="puesto_id" ref="demo_puesto_operario"/>
+    </record>
+    <record id="demo_val_linea_1" model="rrhh.valoracion.linea">
+        <field name="valoracion_id" ref="demo_valoracion_ana"/>
+        <field name="name">Arranque de linea</field>
+        <field name="tipo">tarea</field>
+        <field name="tarea_id" ref="demo_tarea_arranque"/>
+        <field name="nivel_esperado">3</field>
+        <field name="nivel">3</field>
+    </record>
+    <record id="demo_val_linea_2" model="rrhh.valoracion.linea">
+        <field name="valoracion_id" ref="demo_valoracion_ana"/>
+        <field name="name">Uso EPI</field>
+        <field name="tipo">form_oblig</field>
+        <field name="cumplido" eval="True"/>
+    </record>
+    <!-- 2 acciones plan -->
+    <record id="demo_accion_epis" model="formacion.accion">
+        <field name="name">Formacion uso EPIs</field>
+        <field name="tipo">necesidad</field>
+        <field name="estado">planificada</field>
+        <field name="fecha_prevista" eval="(DateTime.today() + timedelta(days=30)).strftime('%Y-%m-%d')"/>
+        <field name="horas" eval="4"/>
+        <field name="persona_prev_ids" eval="[(6, 0, [ref('demo_persona_ana'), ref('demo_persona_bruno')])]"/>
+    </record>
+    <record id="demo_accion_arranque" model="formacion.accion">
+        <field name="name">Arranque seguro de linea</field>
+        <field name="tipo">polivalencia</field>
+        <field name="estado">realizada</field>
+        <field name="horas" eval="6"/>
+        <field name="persona_prev_ids" eval="[(6, 0, [ref('demo_persona_bruno')])]"/>
+    </record>
+</odoo>

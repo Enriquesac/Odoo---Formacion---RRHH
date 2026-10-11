@@ -1,0 +1,29 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_persona_user,persona user,model_rrhh_persona,group_formacion_user,1,1,1,0
+access_persona_manager,persona manager,model_rrhh_persona,group_formacion_manager,1,1,1,1
+access_persona_any,persona base,model_rrhh_persona,base.group_user,1,1,1,0
+access_perspuesto_user,puesto rel user,model_rrhh_persona_puesto,group_formacion_user,1,1,1,1
+access_perspuesto_any,puesto rel base,model_rrhh_persona_puesto,base.group_user,1,1,1,0
+access_puesto_user,puesto user,model_rrhh_puesto,group_formacion_user,1,1,1,0
+access_puesto_manager,puesto manager,model_rrhh_puesto,group_formacion_manager,1,1,1,1
+access_puesto_any,puesto base,model_rrhh_puesto,base.group_user,1,1,1,0
+access_tarea_user,tarea user,model_rrhh_puesto_tarea,group_formacion_user,1,1,1,1
+access_tarea_any,tarea base,model_rrhh_puesto_tarea,base.group_user,1,1,1,0
+access_valoracion_user,valoracion user,model_rrhh_valoracion,group_formacion_user,1,1,1,1
+access_valoracion_any,valoracion base,model_rrhh_valoracion,base.group_user,1,1,1,0
+access_valorlinea_user,valor linea user,model_rrhh_valoracion_linea,group_formacion_user,1,1,1,1
+access_valorlinea_any,valor linea base,model_rrhh_valoracion_linea,base.group_user,1,1,1,0
+access_accion_user,accion user,model_formacion_accion,group_formacion_user,1,1,1,1
+access_accion_any,accion base,model_formacion_accion,base.group_user,1,1,1,0
+access_proceso_user,proceso user,model_rrhh_proceso,group_formacion_user,1,1,1,1
+access_proceso_any,proceso base,model_rrhh_proceso,base.group_user,1,1,1,0
+access_procitem_user,proceso item user,model_rrhh_proceso_item,group_formacion_user,1,1,1,1
+access_procitem_any,proceso item base,model_rrhh_proceso_item,base.group_user,1,1,1,0
+access_asignacion_user,asignacion user,model_rrhh_asignacion,group_formacion_user,1,1,1,1
+access_asignacion_any,asignacion base,model_rrhh_asignacion,base.group_user,1,1,1,0
+access_orgver_user,organigrama user,model_rrhh_organigrama_version,group_formacion_user,1,1,1,1
+access_orgver_any,organigrama base,model_rrhh_organigrama_version,base.group_user,1,1,1,0
+access_destreza_user,destreza user,model_formacion_destreza,group_formacion_user,1,1,1,1
+access_destreza_any,destreza base,model_formacion_destreza,base.group_user,1,0,0,0
+access_formador_user,formador user,model_formacion_formador,group_formacion_user,1,1,1,1
+access_formador_any,formador base,model_formacion_formador,base.group_user,1,0,0,0

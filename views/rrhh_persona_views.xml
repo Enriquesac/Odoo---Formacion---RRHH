@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_persona_search" model="ir.ui.view">
+        <field name="name">rrhh.persona.search</field>
+        <field name="model">rrhh.persona</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Nombre"/>
+                <field name="departamento"/>
+                <filter string="Activos" name="f_act" domain="[('activo','=',True)]"/>
+                <filter string="De baja" name="f_baja" domain="[('activo','=',False)]"/>
+            </search>
+        </field>
+    </record>
+    <record id="view_persona_list" model="ir.ui.view">
+        <field name="name">rrhh.persona.list</field>
+        <field name="model">rrhh.persona</field>
+        <field name="arch" type="xml">
+            <list string="Personas" decoration-muted="activo == False">
+                <field name="nombre_completo"/>
+                <field name="departamento" optional="show"/>
+                <field name="employee_id" optional="show"/>
+                <field name="cumplimiento_medio" string="% medio" optional="show"/>
+                <field name="activo" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_persona_form" model="ir.ui.view">
+        <field name="name">rrhh.persona.form</field>
+        <field name="model">rrhh.persona</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Ficha">
+                            <field name="name" string="Nombre"/>
+                            <field name="apellidos"/>
+                            <field name="email"/>
+                            <field name="departamento"/>
+                        </group>
+                        <group string="Situacion">
+                            <field name="employee_id"/>
+                            <field name="fecha_alta"/>
+                            <field name="fecha_baja"/>
+                            <field name="activo"/>
+                            <field name="cumplimiento_medio" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Puestos">
+                            <field name="puesto_rel_ids">
+                                <list editable="bottom">
+                                    <field name="puesto_id"/>
+                                    <field name="rol"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Valoraciones">
+                            <field name="valoracion_ids" readonly="1">
+                                <list>
+                                    <field name="puesto_id"/>
+                                    <field name="fecha" optional="show"/>
+                                    <field name="cumplimiento"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Asignaciones">
+                            <field name="asignacion_ids" readonly="1">
+                                <list>
+                                    <field name="recurso_nombre"/>
+                                    <field name="tipo" optional="show"/>
+                                    <field name="estado"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_persona" model="ir.actions.act_window">
+        <field name="name">Personas</field>
+        <field name="res_model">rrhh.persona</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
